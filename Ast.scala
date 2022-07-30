@@ -54,8 +54,8 @@ def FunctionDefinitionParser: Parser[Token, Expression] = {
     def head = dat(Id) <& sym(Assign)
     def args = sym(LParen) &> Parser.sep(dat(Id))(sym(Comma)) <& sym(RParen)
     head & args map {case (a, l) => FunctionDefinition(a, l, Nil)}
-    // def body = syn[LCurly.type] &> syn[Id] <& syn[RCurly.type]
-    // head & args & body map {case ((a, l), b) => FunctionDefinition(a, l, List(b))}
+    def body = syn[LCurly.type] &> syn[Id] <& syn[RCurly.type]
+    head & args & body map {case ((a, l), b) => FunctionDefinition(a, l, List(b))}
 }
 
 case class FunctionCall (
@@ -63,14 +63,14 @@ case class FunctionCall (
     __args: List[Lexer.__StringLiteral]
 ) extends Expression
 
-// def FunctionCallParser: Parser[Token, Expression] = {
-//     def parsed = syn[Lexer.Id] & (syn[LParen.type] &> CommaList[StringLiteral] <& syn[RParen.type])
-//     parsed map {
-//         case (i, o) => FunctionCall(i, o)
-//     }
-// }
+def FunctionCallParser: Parser[Token, Expression] = {
+    def parsed = syn[Lexer.Id] & (syn[LParen.type] &> CommaList[StringLiteral] <& syn[RParen.type])
+    parsed map {
+        case (i, o) => FunctionCall(i, o)
+    }
+}
 
-// case class VarAssignment(__name: Id, value: DataToken[_]) extends Expression
+case class VarAssignment(__name: Id, value: DataToken[_]) extends Expression
 
 
 // I think the backing function in Parse, is failing because of the use of the `syn` function here
@@ -79,7 +79,7 @@ case class FunctionCall (
 // replace `syn` with typeclass mechanism - :::B:C:::7:15:::23:54:::
 def CommaList[A <: Lexer.Data[_]](archetype: A) = Parser {
     (input: List[Token]) => input match
-        case 
+        case _ => ??? 
 }
 
 // def ArgList = syn[LParen.type] &> CommaList[Id] <& syn[RParen.type]

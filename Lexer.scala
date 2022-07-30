@@ -7,7 +7,6 @@ import implicits.{StringToCharList, CharParseable, CharListToString, TokenParsea
 
 object Lexer:
 
-
     // Token ADT
     trait Token
 
